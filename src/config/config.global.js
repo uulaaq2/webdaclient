@@ -1,4 +1,4 @@
-const apiServer = 'http://10.181.10.97:3002'
+const apiServer = 'http://AUBOTD9X94HD2:3002'
 
 module.exports = {
     showClientDevelopmentErros: true,
@@ -43,6 +43,10 @@ module.exports = {
             path: '/public',
             name: 'Public'
         },
+        noPermission: {
+            path: '/nopermission',
+            name: 'Sorry, you don\'t have access'
+        },
         settings: {
             id: 'settings',
             name: 'Settings',
@@ -51,9 +55,9 @@ module.exports = {
                 id: 'groups',
                 path: '/settings/groups',
                 name: 'Groups',
-                listPerPage: 20,
+                listPerPage: 5,
                 new: {
-                    id: 'New group',
+                    id: 'groups',
                     name: 'New group'
                 }
             },

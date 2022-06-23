@@ -16,6 +16,7 @@ import ChangePassword from 'pages/public/changePassword'
 import Settings from 'pages/protected/settings'
 import Groups from 'pages/protected/settings/groups'
 import Redirect from 'pages/redirect'
+import NoPermission from 'pages/noPermission'
 
 import ProtectedHome from 'pages/protected/home'
 
@@ -43,6 +44,13 @@ const App = () => {
               element={
                 <PrivateRoute element={<ProtectedHome />} />
               }            
+            />
+
+            <Route 
+              path="/nopermission"
+              element={
+                <PublicRoute element={<NoPermission />} />
+              }
             />
 
             <Route exact path="/redirect" element={<Redirect />} />                                            

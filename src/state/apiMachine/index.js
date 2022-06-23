@@ -62,6 +62,8 @@ export const apiMachine = createMachine({
 })
 
 async function start(c, e) {   
+  c.params = e.params
+
   const result = await e.startFunction(c.params)
 
   return result

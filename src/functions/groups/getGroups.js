@@ -7,10 +7,10 @@ async function getGroups(params) {
     const url = config.api.urls.groups.get
     const data = {params}
     const accepts = fetchOptions.headers.accepts.json
-
-    const getResult = await baseFetch('POST', url, data, accepts)
+    console.log('data 2 ', data)
+    const result = await baseFetch('POST', url, data, accepts)
     
-    return getResult
+    return result
   } catch (error) {
     return setError(error)
   }

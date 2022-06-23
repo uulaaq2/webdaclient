@@ -1,11 +1,13 @@
 import appStyle from 'app/style.css'
 import React, { useEffect, useState } from 'react'
 import { FormControl, Select, Box, Heading, Button, Link, Spinner, Pagehead, Text, Flash, StyledOcticon } from '@primer/react'
-import { TriangleDownIcon, CircleSlashIcon, SearchIcon } from '@primer/octicons-react'
+import { TriangleDownIcon, TriangleUpIcon, SearchIcon } from '@primer/octicons-react'
 import config from 'config'
 import B_Listloading from 'baseComponents/B_Listloading'
 import getGroups from 'functions/groups/getGroups'
 import B_Formerror from 'baseComponents/B_Formerror'
+import B_Search from 'baseComponents/B_Search'
+import B_Pagination from 'baseComponents/B_Pagination'
 
 import { useMachine } from '@xstate/react'
 import { apiMachine } from 'state/apiMachine'
@@ -16,6 +18,7 @@ const AppList = ({
   
   const [current, send] = useMachine(apiMachine)
   const [azDropdownOpen, setAZDropdownOpen] = useState(true)
+  const [querySuccess, setQuerySuccess] = useState(false)
 
   const stateObj = {
     inProgress: current.context.inProgress
@@ -26,34 +29,35 @@ const AppList = ({
   }
 
   function handleGetList(params) {   
-    current.context.params = {
-      ...current.context.params,
-      ...params
-    }
-
-    console.log(current.context)
-    
     send('RESET')
-    
+
     send('START', {
-      startFunction: getGroups
+      startFunction: getGroups,
+      params: {
+        ...current.context.params,
+        ...params
+      }
     })
 
     setAZDropdownOpen(!azDropdownOpen)
-  }
+  }  
+
   useEffect(() => {
-    current.context.params.name = '';
-    current.context.params.orderByFields = 'Name';
-    current.context.params.order = 'A-Z';
-    current.context.params.searchField = '';
-    current.context.params.searchText = '';
-    current.context.params.listPerPage = config.urls.settings.groups.listPerPage;
     
-    handleGetList()
+    handleGetList({
+      orderByFields: 'Name',
+      order: 'A-Z',
+      searchField: '',
+      searchValue: '',
+      searchType: 'includes',
+      listPerPage: config.urls.settings.groups.listPerPage      
+    })
   }, [])
 
   useEffect(() => {
-    //console.log(current)
+    setQuerySuccess((current.matches('finished') && current.context.data.status === 'ok'))
+
+    console.log(current)
   }, [current.value])
 
   return (
@@ -64,17 +68,10 @@ const AppList = ({
           { config.urls.settings.groups.name }
         </div>
         <div style={{display: 'flex', justifyContent: 'space-between'}}> 
-        <div class="input-group" style={{marginRight: '0.5rem'}}>            
-            <input class="form-control" type="text" placeholder='Group name' />
-            <span class="input-group-button">
-              <button class="btn" type="button">
-                <SearchIcon />
-              </button>
-            </span>
-          </div>           
+          <B_Search current={current} searchField='Name' startFunction={handleGetList} />
 
-          <button className='btn'>New</button>
-        </div>
+          <button className='btn btn-primary' onClick={() => setMode('new')}>New</button>
+        </div> 
       </Pagehead>
  
       <div className="Box Box--condensed">
@@ -86,14 +83,20 @@ const AppList = ({
 
           </div>
         </div>
-        { (current.matches('finished') && current.context.data.status === 'ok') &&
-           current.context.data.groups.map((g, i) => {
-            return (
-              <div className="Box-body Box-row--hover-gray" key={i}>
-              <a onClick={() => alert('aaa')} className='color-fg-default'>{ g.Name }</a>
-              </div>    
-            )
+        { querySuccess && current.context.data.totalRows > 0 &&
+            current.context.data.groups.map((g, i) => {
+              return (
+                <div className="Box-body Box-row--hover-gray" key={i}>
+                  <a className='color-fg-default'>{ g.Name }</a>
+                </div>    
+              )                          
         })}
+
+        { querySuccess && current.context.data.totalRows === 0 && 
+          <div className="Box-body Box-row--hover-gray" style={{textAlign: 'center'}}>
+            <span className='color-fg-default'>No groups</span>
+          </div>        
+        }
 
         { current.context.inProgress && 
           <Box display={'flex'} alignItems='center' justifyContent='center' p={2}>
@@ -101,9 +104,14 @@ const AppList = ({
           </Box>
         }
       </div>
-    { current.matches('failed') &&
-          <B_Formerror error={current.context.data} style={{marginTop: '1rem'}} />
-    }
+
+      { !querySuccess &&
+            <B_Formerror error={current.context.data} style={{marginTop: '1rem'}} /> 
+      }
+
+      { querySuccess && current.context.data.totalRows > 0 && current.context.data.totalRows > current.context.params.listPerPage &&
+        <B_Pagination />
+      }
     </div>
 
     </>
