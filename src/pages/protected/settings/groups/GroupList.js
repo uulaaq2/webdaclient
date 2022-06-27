@@ -50,13 +50,14 @@ const AppList = ({
       searchField: '',
       searchValue: '',
       searchType: 'includes',
-      listPerPage: config.urls.settings.groups.listPerPage      
+      currentPage: 1,
+      listPerPage: config.urls.settings.groups.listPerPage,
+      active: 1
     })
   }, [])
 
   useEffect(() => {
     setQuerySuccess((current.matches('finished') && current.context.data.status === 'ok'))
-
     console.log(current)
   }, [current.value])
 
@@ -83,7 +84,7 @@ const AppList = ({
 
           </div>
         </div>
-        { querySuccess && current.context.data.totalRows > 0 &&
+        { querySuccess && current.context.data.groups.length > 0 &&
             current.context.data.groups.map((g, i) => {
               return (
                 <div className="Box-body Box-row--hover-gray" key={i}>
@@ -92,7 +93,7 @@ const AppList = ({
               )                          
         })}
 
-        { querySuccess && current.context.data.totalRows === 0 && 
+        { querySuccess && current.context.data.groups.length === 0 && 
           <div className="Box-body Box-row--hover-gray" style={{textAlign: 'center'}}>
             <span className='color-fg-default'>No groups</span>
           </div>        
@@ -110,7 +111,7 @@ const AppList = ({
       }
 
       { querySuccess && current.context.data.totalRows > 0 && current.context.data.totalRows > current.context.params.listPerPage &&
-        <B_Pagination />
+        <B_Pagination current={current} listPerPage={config.urls.settings.groups.listPerPage} startFunction={handleGetList} />
       }
     </div>
 
