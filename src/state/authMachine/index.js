@@ -182,15 +182,15 @@ service.start()
 
 // get user
 async function doGetUser(context, event) {
-  try {        
-    const { requestType = '', email = undefined, password = undefined, rememberMe = undefined } = event  
+  try {       
+    const { requestType = '', emailAddress = undefined, password = undefined, rememberMe = undefined } = event  
     let signInType    
     let getUserResult
     let rememberMeTemp = rememberMe
 
     if (requestType === 'signInWihCredentials') {
       signInType = 'credentials'
-      getUserResult = await getUserWithCredentials(email, password, rememberMe)
+      getUserResult = await getUserWithCredentials(event)
     }
     
     if (requestType === 'signInWithToken') {
@@ -204,7 +204,7 @@ async function doGetUser(context, event) {
 
     if (requestType === 'changeUserPassword') {
       signInType = 'credentials'      
-      getUserResult = await changeUserPassword(password)
+      getUserResult = await changeUserPassword(event)
       rememberMeTemp = getUserResult.rememberMe
     }
 

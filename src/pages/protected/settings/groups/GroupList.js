@@ -18,7 +18,8 @@ const AppList = ({
   
   const [current, send] = useMachine(apiMachine)
   const [azDropdownOpen, setAZDropdownOpen] = useState(true)
-  const [querySuccess, setQuerySuccess] = useState(false)
+  const [querySuccess, setQuerySuccess] = useState(false)  
+  const [emptyRows, setEmptyRows] = useState()
 
   const stateObj = {
     inProgress: current.context.inProgress
@@ -34,7 +35,14 @@ const AppList = ({
     send('START', {
       startFunction: getGroups,
       params: {
-        ...current.context.params,
+        orderByFields: 'Name',
+        order: 'A-Z',
+        searchField: '',
+        searchValue: '',
+        searchType: 'includes',
+        currentPage: 1,
+        listPerPage: config.urls.settings.groups.listPerPage,
+        active: 1,
         ...params
       }
     })
@@ -44,26 +52,24 @@ const AppList = ({
 
   useEffect(() => {
     
-    handleGetList({
-      orderByFields: 'Name',
-      order: 'A-Z',
-      searchField: '',
-      searchValue: '',
-      searchType: 'includes',
-      currentPage: 1,
-      listPerPage: config.urls.settings.groups.listPerPage,
-      active: 1
-    })
+    handleGetList()
   }, [])
 
   useEffect(() => {
-    setQuerySuccess((current.matches('finished') && current.context.data.status === 'ok'))
-    console.log(current)
+    if ((current.matches('finished') && current.context.data.status === 'ok')) {
+      setQuerySuccess(true)
+    } else {
+      setQuerySuccess(false)
+    }
+    if (current.context.data.groups) {
+      console.log(current.context.data.groups.length)
+      setEmptyRows(Array.from({length: (config.urls.settings.groups.listPerPage - current.context.data.groups.length)}, (_, i) => i + 1))
+    }
   }, [current.value])
 
   return (
     <>
-    <div className="container-sm clearfix">
+    <div className="container-sm clearfix" style={{overflow: 'hidden'}}>
       <Pagehead sx={{fontSize: 4, borderBottom: 'none', margin: 0, padding: 0, marginBottom: '1rem'}} >
         <div style={{marginBottom: '1rem'}}>
           { config.urls.settings.groups.name }
@@ -91,7 +97,8 @@ const AppList = ({
                   <a className='color-fg-default'>{ g.Name }</a>
                 </div>    
               )                          
-        })}
+            })
+        }
 
         { querySuccess && current.context.data.groups.length === 0 && 
           <div className="Box-body Box-row--hover-gray" style={{textAlign: 'center'}}>
@@ -99,9 +106,17 @@ const AppList = ({
           </div>        
         }
 
+        { emptyRows && emptyRows.map((e, i) => {
+            return (
+              <div className="Box-body" style={{textAlign: 'center'}}>
+              <span className='color-fg-default'>&#8203;</span>
+              </div>  
+            )})
+        }
+        
         { current.context.inProgress && 
           <Box display={'flex'} alignItems='center' justifyContent='center' p={2}>
-            <Spinner size='small' /> 
+            <Spinner size='small' sx={{animationDelay: '0.800s'}}/> 
           </Box>
         }
       </div>
@@ -110,7 +125,7 @@ const AppList = ({
             <B_Formerror error={current.context.data} style={{marginTop: '1rem'}} /> 
       }
 
-      { querySuccess && current.context.data.totalRows > 0 && current.context.data.totalRows > current.context.params.listPerPage &&
+{ querySuccess && current.context.data.totalRows > 0 && current.context.data.totalRows > current.context.params.listPerPage &&
         <B_Pagination current={current} listPerPage={config.urls.settings.groups.listPerPage} startFunction={handleGetList} />
       }
     </div>

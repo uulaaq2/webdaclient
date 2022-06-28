@@ -2,11 +2,11 @@ import { setScuess, setWarning, setError } from 'functions/setReply'
 import { fetchOptions, baseFetch } from "functions/baseFetch"
 import config from 'config'
 
-async function changeUserPassword(newPassword) {
+async function changeUserPassword(params) {
   try {
     const url = config.api.urls.user.changePassword
-    console.log(url)
-    const data = { token, newPassword }
+    const { newPassword } = params
+    const data = { newPassword }
 
     const accepts = fetchOptions.headers.accepts.json
 

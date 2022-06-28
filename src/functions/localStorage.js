@@ -53,17 +53,13 @@ function getCookie(key) {
     }
 
     key = key.slice(-1)
-    
+    console.log('res ', res)    
     const data = {
       key,
-      value: res
+      value: res ? res : ''
     }
     
-    if (res) {
-      return setSuccess(data)
-    } else {
-      return setWarning('No token found in local storage')
-    }
+    return setSuccess(data)
   } catch (error) {
     return setError(error)
   }

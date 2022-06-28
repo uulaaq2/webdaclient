@@ -14,7 +14,7 @@ function useGetUserInfo() {
         const getTokenResult = getLocalStorage('token')
         const token = getTokenResult.status === 'ok' ? getTokenResult.value : ''      
         if (token) {
-          send('SIGN_IN', { requestType: 'signInWithToken', token, site: getLocalStorage('site').value })
+          send('SIGN_IN', { requestType: 'signInWithToken' })
         } else {
           send('FAIL')
         }

@@ -78,7 +78,7 @@ const SignIn = () => {
 
     send('SIGN_IN', {    
       requestType: 'signInWihCredentials',
-      email: emailRef.current.value, 
+      emailAddress: emailRef.current.value, 
       password: passwordRef.current.value, 
       rememberMe: rememberMeRef.current.checked
     })

@@ -20,43 +20,44 @@ const index = ({
   }
 
   useEffect(() => {
-console.log(' aaa ', totalPages)
   }, [])
 
   return (
-    <nav className="paginate-container" aria-label="Pagination">
-      <div className="pagination">
-        <a 
-          className="previous_page" 
-          rel="previous" 
-          aria-label="Previous Page" 
-          aria-disabled={current.context.params.currentPage === 1}
-          onClick={e => handleStartFunction(e, current.context.params.currentPage - 1)}
-        >
-          Previous
-        </a>
-        {
-          pages &&
-          pages.map((page, i) => {
-            return current.context.params.currentPage === (i + 1) ?
-              <em aria-current="page" key={i + 1}>{i + 1}</em>
-            :
-              <a key={i + 1}
-                onClick={ e => handleStartFunction(e, (i + 1)) }
-              >{ i + 1 }</a>
-          })
-        }
-        <a 
-          className="next_page" 
-          rel="next" 
-          aria-label="Next Page" 
-          aria-disabled={current.context.params.currentPage === pages.length}
-          onClick={e => handleStartFunction(e, current.context.params.currentPage + 1)}
-        >
-            Next
-        </a>
-      </div>
-    </nav>
+      <nav className="paginate-container" aria-label="Pagination" style={{ maxWidth: '100%'}}>
+        <div className="pagination" style={{display: 'flex', flexDirection: 'row'}}>
+          <a 
+            className="previous_page" 
+            rel="previous" 
+            aria-label="Previous Page" 
+            aria-disabled={current.context.params.currentPage === 1}
+            onClick={e => handleStartFunction(e, current.context.params.currentPage - 1)}            
+          >
+            Previous
+          </a>
+          <div style={{flexGrow: 1}}>
+            {
+              pages &&
+              pages.map((page, i) => {
+                return current.context.params.currentPage === (i + 1) ?
+                  <em aria-current="page" key={i + 1}>{i + 1}</em>
+                :
+                  <a key={i + 1}
+                    onClick={ e => handleStartFunction(e, (i + 1)) }
+                  >{ i + 1 }</a>
+              })
+            }
+          </div>
+          <a 
+            className="next_page" 
+            rel="next" 
+            aria-label="Next Page" 
+            aria-disabled={current.context.params.currentPage === pages.length}
+            onClick={e => handleStartFunction(e, current.context.params.currentPage + 1)}
+          >
+              Next
+          </a>
+        </div>
+      </nav>
   );
 };
 
