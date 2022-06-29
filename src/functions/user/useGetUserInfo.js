@@ -11,8 +11,7 @@ function useGetUserInfo() {
  
   useEffect(() => {    
       if (state.context.userInfo.status !== 'ok') {
-        const getTokenResult = getLocalStorage('token')
-        const token = getTokenResult.status === 'ok' ? getTokenResult.value : ''      
+        const token = getLocalStorage('token').value
         if (token) {
           send('SIGN_IN', { requestType: 'signInWithToken' })
         } else {

@@ -20,9 +20,7 @@ const index = ({ showTitle = false }) => {
   const [ state  ] = useActor(globalServices.authService)  
 
   useEffect(() => {
-    if (!checkMenuPermission(config.urls.settings.groups.id, state.context.userInfo.user.permissions)) {
-      appNavigate(config.urls.home.path)
-    }
+
   }, [])
 
   return (

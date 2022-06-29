@@ -20,7 +20,7 @@ import { apiMachine } from 'state/apiMachine'
 const NewGroup = ({
   setMode
 }) => {
-  usePageInitial({ pageName: 'settings.groups.new' })
+  usePageInitial({ pageName: 'settings.groups' })
   
   const globalServices = useContext(GlobalStateContext)  
   const [ state  ] = useActor(globalServices.authService)    
@@ -50,10 +50,6 @@ const NewGroup = ({
   })  
 
   useEffect(() => {
-    console.log(state.context.userInfo.user.permissions)
-    if (!checkMenuPermission(config.urls.settings.groups.id, state.context.userInfo.user.permissions)) {
-      appNavigate(config.urls.noPermission.path)
-    }
     nameRef.current.focus()
   }, [])
 

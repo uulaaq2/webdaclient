@@ -164,14 +164,16 @@ export const AppMenuItems = ({ setAppMenuOpen }) => {
               </Box>
             }
 
-            <Box className={style.subMenuWrapper}>
-            <ActionList.Item
-                onClick={() => handleGoTo(config.urls.settings.groups.path)}
-                className={`${appLocation.fullPath === config.urls.settings.groups.path ? style.subMenuActive : ''} ${style.noBackground}`}
-              >
-                {config.urls.settings.groups.name}
-              </ActionList.Item>
+            { checkMenuPermission(config.urls.settings.users.id, permissions) &&
+              <Box className={style.subMenuWrapper}>
+              <ActionList.Item
+                  onClick={() => handleGoTo(config.urls.settings.groups.path)}
+                  className={`${appLocation.fullPath === config.urls.settings.groups.path ? style.subMenuActive : ''} ${style.noBackground}`}
+                >
+                  {config.urls.settings.groups.name}
+                </ActionList.Item>
             </Box>
+            }
           </>
         }
         </>

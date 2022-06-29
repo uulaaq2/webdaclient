@@ -22,9 +22,9 @@ export async function baseFetch(method, url, data = {}, accepts = {}) {
 
     data.token = getLocalStorage('token').value
     data.site = getLocalStorage('site').value
-
+    console.log(' basefetch ', data, url)
+    
     const requestResult = await axios({ method, url, data, headers })
-    console.log(requestResult)
 
     return requestResult.data
   } catch (error) {

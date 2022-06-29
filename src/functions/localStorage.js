@@ -53,7 +53,7 @@ function getCookie(key) {
     }
 
     key = key.slice(-1)
-    console.log('res ', res)    
+
     const data = {
       key,
       value: res ? res : ''

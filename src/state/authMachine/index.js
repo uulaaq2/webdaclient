@@ -195,11 +195,8 @@ async function doGetUser(context, event) {
     
     if (requestType === 'signInWithToken') {
       signInType = 'token'
-      const token = getLocalStorage('token')
-      if (token.status === 'ok') {
-        getUserResult = await getUserWithToken()
-        rememberMeTemp = getUserResult.rememberMe        
-      } 
+      getUserResult = await getUserWithToken()
+      rememberMeTemp = getUserResult.rememberMe        
     }
 
     if (requestType === 'changeUserPassword') {

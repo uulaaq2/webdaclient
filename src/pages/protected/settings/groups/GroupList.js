@@ -1,5 +1,5 @@
 import appStyle from 'app/style.css'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { FormControl, Select, Box, Heading, Button, Link, Spinner, Pagehead, Text, Flash, StyledOcticon } from '@primer/react'
 import { TriangleDownIcon, TriangleUpIcon, SearchIcon } from '@primer/octicons-react'
 import config from 'config'
@@ -9,12 +9,19 @@ import B_Formerror from 'baseComponents/B_Formerror'
 import B_Search from 'baseComponents/B_Search'
 import B_Pagination from 'baseComponents/B_Pagination'
 
+
+import { GlobalStateContext } from 'state/globalState'
+import { useActor } from '@xstate/react'
+import { getLocalStorage } from 'functions/localStorage';
+
 import { useMachine } from '@xstate/react'
 import { apiMachine } from 'state/apiMachine'
 
 const AppList = ({
   setMode
 }) => {
+  const globalServices = useContext(GlobalStateContext)  
+  const [ state  ] = useActor(globalServices.authService)    
   
   const [current, send] = useMachine(apiMachine)
   const [azDropdownOpen, setAZDropdownOpen] = useState(true)
@@ -41,17 +48,16 @@ const AppList = ({
         searchValue: '',
         searchType: 'includes',
         currentPage: 1,
-        listPerPage: config.urls.settings.groups.listPerPage,
+        listPerPage: state.context.userInfo.user.settings['settings.groups.listPerPage'],
         active: 1,
         ...params
       }
     })
-
     setAZDropdownOpen(!azDropdownOpen)
   }  
 
   useEffect(() => {
-    
+
     handleGetList()
   }, [])
 
@@ -61,9 +67,9 @@ const AppList = ({
     } else {
       setQuerySuccess(false)
     }
+
     if (current.context.data.groups) {
-      console.log(current.context.data.groups.length)
-      setEmptyRows(Array.from({length: (config.urls.settings.groups.listPerPage - current.context.data.groups.length)}, (_, i) => i + 1))
+      setEmptyRows(Array.from({length: (current.context.params.listPerPage - current.context.data.groups.length)}, (_, i) => i + 1))
     }
   }, [current.value])
 
@@ -108,15 +114,15 @@ const AppList = ({
 
         { emptyRows && emptyRows.map((e, i) => {
             return (
-              <div className="Box-body" style={{textAlign: 'center'}}>
-              <span className='color-fg-default'>&#8203;</span>
+              <div className="Box-body" key={i}>
+                <span className='color-fg-default'>&#8203;</span>
               </div>  
             )})
         }
         
         { current.context.inProgress && 
           <Box display={'flex'} alignItems='center' justifyContent='center' p={2}>
-            <Spinner size='small' sx={{animationDelay: '0.800s'}}/> 
+            <Spinner size='small' /> 
           </Box>
         }
       </div>
@@ -125,8 +131,8 @@ const AppList = ({
             <B_Formerror error={current.context.data} style={{marginTop: '1rem'}} /> 
       }
 
-{ querySuccess && current.context.data.totalRows > 0 && current.context.data.totalRows > current.context.params.listPerPage &&
-        <B_Pagination current={current} listPerPage={config.urls.settings.groups.listPerPage} startFunction={handleGetList} />
+      { querySuccess && current.context.data.totalRows > 0 && current.context.data.totalRows > current.context.params.listPerPage &&
+        <B_Pagination current={current} listPerPage={current.context.params.listPerPage} startFunction={handleGetList} />
       }
     </div>
 

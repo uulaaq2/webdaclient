@@ -52,27 +52,26 @@ module.exports = {
             name: 'Settings',
             path: '/settings',
             groups: {
-                id: 'groups',
+                id: 'settings.groups',
                 path: '/settings/groups',
-                name: 'Groups',
-                listPerPage: 5,
+                name: 'Groups',                
                 new: {
                     id: 'groups',
                     name: 'New group'
                 }
             },
             departments: {
-                id: 'departments',
+                id: 'settings.departments',
                 path: '/settings/departments',
                 name: 'Departments'
             },  
             users: {
-                id: 'users',
+                id: 'settings.users',
                 path: '/settings/users',
                 name: 'Users'
             },                      
             sites: {
-                id: 'sites',
+                id: 'settings.sites',
                 path: '/sites',
                 name: 'Sites'
             }
