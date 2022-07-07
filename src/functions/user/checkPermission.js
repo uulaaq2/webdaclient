@@ -1,20 +1,17 @@
 import { setSuccess, setWarning, setCustom, setError } from 'functions/setReply'
 import config from 'config'
 
-export function checkMenuPermission(menuName, permissions) { 
-  if (permissions.hasOwnProperty(menuName)) {
-    return true
-  }
+export function checkMenuPermission(menuName, userInfo) { 
+  console.log('abc ', userInfo)
+  if (userInfo.user.Global_Admin) return true
+  if (userInfo.menus.Settings?.['Site admin']?.['Admin']) return true
 
   return false
 }
 
-export function checkPermission(permissionName, lookFor, permissions) {
-  if (permissions.hasOwnProperty(permissionName)) {
-    if (permissions[permissionName].includes(lookFor)) {
-      return true
-    }
-  }
+export function checkPermission(permissionName, lookFor, user) {
+  if (userInfo.user.Global_Admin) return true
+  if (userInfo.menus.App['Site admin']) return true
 
   return false
 }

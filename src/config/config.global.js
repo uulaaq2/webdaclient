@@ -48,7 +48,7 @@ module.exports = {
             name: 'Sorry, you don\'t have access'
         },
         settings: {
-            id: 'settings',
+            id: 'Settings',
             name: 'Settings',
             path: '/settings',
             groups: {
@@ -61,21 +61,41 @@ module.exports = {
                 }
             },
             departments: {
-                id: 'settings.departments',
+                id: 'Settings.Departments',
                 path: '/settings/departments',
                 name: 'Departments'
             },  
             users: {
-                id: 'settings.users',
+                id: 'Settings.Users',
                 path: '/settings/users',
                 name: 'Users'
             },                      
             sites: {
-                id: 'settings.sites',
+                id: 'Settings.Sites',
                 path: '/sites',
                 name: 'Sites'
             }
-        }
+        },   
+        config: {               
+            id: 'Config',
+            path: '/config',
+            name: 'Config',
+            permissionActions: {
+                id: 'Config.Permission Actions',
+                path: '/config/permissions/actions',
+                name: 'Permission actions'
+            },
+            permissionMenus: {
+                id: 'Config.Permission Menus',
+                path: '/config/permissions/menus',
+                name: 'Permission menus'
+            },
+            permissionDefinitions: {
+                id: 'Config.Permission Definitions',
+                path: '/config/permissions/definitions',
+                name: 'Permission definitions'
+            }
+        }         
     },
     api: {
         urls: {
@@ -91,6 +111,10 @@ module.exports = {
             groups: {
                 get: apiServer + '/groups/get',
                 new: apiServer + '/groups/new',
+            },
+            permissions: {
+                getPermissionsWithActionsList: apiServer + '/permissions/getpermissionswithactionslist',
+                getActions: apiServer + '/permissions/getactions'
             },
             getDrawings: apiServer + '/getdrawings',
             verifyToken: apiServer + '/verifytoken',

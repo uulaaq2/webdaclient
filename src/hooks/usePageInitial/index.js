@@ -20,7 +20,7 @@ const index = (params) => {
     }
     document.title = page.name + ' | ' + config.app.name    
     
-    if (!checkMenuPermission(page.id, state.context.userInfo.user.permissions)) {
+    if (!checkMenuPermission(page.id, state.context.userInfo)) {
       appNavigate(config.urls.noPermission.path)
     }     
   }, [])

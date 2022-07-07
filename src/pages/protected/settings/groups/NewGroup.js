@@ -6,7 +6,6 @@ import { Flash, TextInput, Box, ButtonGroup, Button, PageLayout, Heading, Text, 
 import B_InputFormGroup from 'baseComponents/B_InputFormGroup'
 import addNewGroup from 'functions/groups/addNewGroup'
 import { validateInputFields, addError } from 'functions/validateInputFields'
-import { checkMenuPermission } from 'functions/user/checkPermission'
 import B_SectionTitle from 'baseComponents/B_SectionTitle'
 import usePageInitial from 'hooks/usePageInitial'
 import useAppnavigate from 'hooks/useAppnavigate'
@@ -67,7 +66,6 @@ const NewGroup = ({
       //setMode('list')
     }
 
-    console.log(current)
   }, [current.value])
 
   async function handleSubmit() {
@@ -76,9 +74,7 @@ const NewGroup = ({
       throw new Error(validateInputFieldsResult.message) 
     }
     if (validateInputFieldsResult.status !== 'ok') return
-
-    console.log(current.context)
-    
+   
     send('RESET')
 
     send('START', {

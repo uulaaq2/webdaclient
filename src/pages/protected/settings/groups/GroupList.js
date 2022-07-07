@@ -9,7 +9,6 @@ import B_Formerror from 'baseComponents/B_Formerror'
 import B_Search from 'baseComponents/B_Search'
 import B_Pagination from 'baseComponents/B_Pagination'
 
-
 import { GlobalStateContext } from 'state/globalState'
 import { useActor } from '@xstate/react'
 import { getLocalStorage } from 'functions/localStorage';
@@ -48,7 +47,7 @@ const AppList = ({
         searchValue: '',
         searchType: 'includes',
         currentPage: 1,
-        listPerPage: state.context.userInfo.user.settings['settings.groups.listPerPage'],
+        listPerPage: 5,
         active: 1,
         ...params
       }

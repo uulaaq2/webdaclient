@@ -17,6 +17,7 @@ import Settings from 'pages/protected/settings'
 import Groups from 'pages/protected/settings/groups'
 import Redirect from 'pages/redirect'
 import NoPermission from 'pages/noPermission'
+import Config from 'pages/protected/config'
 
 import ProtectedHome from 'pages/protected/home'
 
@@ -79,7 +80,13 @@ const App = () => {
               element={
                 <PrivateRoute element={<Settings />} />
               }            
-            />            
+            />    
+            <Route 
+              path="/config" 
+              element={
+                <PrivateRoute element={<Config />} />
+              }            
+            />                       
 
 
             <Route 

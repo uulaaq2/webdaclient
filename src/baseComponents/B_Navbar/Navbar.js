@@ -10,7 +10,7 @@ import useAppnavigate from 'hooks/useAppnavigate'
 import useAppLocation from 'hooks/useAppLocation'
 
 import { Box, ActionList, theme, Avatar, ActionMenu, Link, Autocomplete } from '@primer/react'
-import { HomeIcon, GlobeIcon, ThreeBarsIcon, ChevronLeftIcon, GearIcon, TriangleDownIcon, TriangleUpIcon } from '@primer/octicons-react'
+import { HomeIcon, GlobeIcon, ThreeBarsIcon, ChevronLeftIcon, GearIcon, TriangleDownIcon, TriangleUpIcon, ToolsIcon } from '@primer/octicons-react'
 
 import { GlobalStateContext } from 'state/globalState'
 import { useActor } from '@xstate/react'
@@ -62,7 +62,7 @@ export const HamburgerMenu = ( props ) => {
 
 export const AppMenu = ({ open, setOpen, children }) => {    
   const styles = useSpring({
-    left: open ? 0 : -220
+    left: open ? 0 : -300
   })
 
   const sideBarStyles = {
@@ -93,7 +93,7 @@ export const AppMenuItems = ({ setAppMenuOpen }) => {
   const globalServices = useContext(GlobalStateContext)  
   const [ state  ] = useActor(globalServices.authService)      
   const appNavigate = useAppnavigate() 
-  const permissions = state.context.userInfo.user.permissions
+  const userInfo = state.context.userInfo
   const [settingsOpen, setSettingsOpen] = useState(true)
 
   function handleGoTo(goTo, closeTheSideMenu = true) {
@@ -126,7 +126,7 @@ export const AppMenuItems = ({ setAppMenuOpen }) => {
         {config.urls.public.name}
       </ActionList.Item>
       
-      { checkMenuPermission(config.urls.settings.id, permissions) &&
+      { checkMenuPermission(config.urls.settings.id, userInfo) &&
        <>
        <ActionList.Item 
           //onClick={() => setSettingsOpen(!settingsOpen)}
@@ -142,7 +142,7 @@ export const AppMenuItems = ({ setAppMenuOpen }) => {
 
         { appLocation.pieces[0] === config.urls.settings.path &&
           <>
-            { checkMenuPermission(config.urls.settings.users.id, permissions) &&
+            { checkMenuPermission(config.urls.settings.users.id, userInfo) &&
               <Box className={style.subMenuWrapper}>
                 <ActionList.Item
                   onClick={() => handleGoTo(config.urls.settings.users.path)}
@@ -153,32 +153,43 @@ export const AppMenuItems = ({ setAppMenuOpen }) => {
               </Box>
             }
             
-            { checkMenuPermission(config.urls.settings.users.id, permissions) &&
+            { checkMenuPermission(config.urls.settings.users.id, userInfo) &&
               <Box className={style.subMenuWrapper}>
-              <ActionList.Item
-                  onClick={() => handleGoTo(config.urls.settings.departments.path)}
-                  className={`${appLocation.fullPath === config.urls.settings.departments.path ? style.subMenuActive : ''} ${style.noBackground}`}
-                >
-                  {config.urls.settings.departments.name}
-                </ActionList.Item>
+                <ActionList.Item
+                    onClick={() => handleGoTo(config.urls.settings.departments.path)}
+                    className={`${appLocation.fullPath === config.urls.settings.departments.path ? style.subMenuActive : ''} ${style.noBackground}`}
+                  >
+                    {config.urls.settings.departments.name}
+                  </ActionList.Item>
               </Box>
             }
 
-            { checkMenuPermission(config.urls.settings.users.id, permissions) &&
+            { checkMenuPermission(config.urls.settings.users.id, userInfo) &&
               <Box className={style.subMenuWrapper}>
-              <ActionList.Item
-                  onClick={() => handleGoTo(config.urls.settings.groups.path)}
-                  className={`${appLocation.fullPath === config.urls.settings.groups.path ? style.subMenuActive : ''} ${style.noBackground}`}
-                >
-                  {config.urls.settings.groups.name}
-                </ActionList.Item>
+                <ActionList.Item
+                    onClick={() => handleGoTo(config.urls.settings.groups.path)}
+                    className={`${appLocation.fullPath === config.urls.settings.groups.path ? style.subMenuActive : ''} ${style.noBackground}`}
+                  >
+                    {config.urls.settings.groups.name}
+                  </ActionList.Item>
             </Box>
-            }
+            }                      
           </>
         }
         </>
-      }
-      
+      }  
+
+      { checkMenuPermission(config.urls.config.id, userInfo) &&
+        <ActionList.Item 
+          onClick={() => handleGoTo(config.urls.config.path)}
+          active={appLocation.pieces[0] === config.urls.config.path}
+          className={`${style.fontWeightNormal} ${style.noBackground}`}
+        >
+          <ActionList.LeadingVisual><ToolsIcon /></ActionList.LeadingVisual>
+          {config.urls.config.name}
+        </ActionList.Item>
+      }    
+
     </ActionList>      
     )  
 }
@@ -187,6 +198,7 @@ export const UserAvatar = () => {
   const globalServices = useContext(GlobalStateContext)    
   const { send } = globalServices.authService
   const [ state  ] = useActor(globalServices.authService)    
+  const userInfo = state.context.userInfo
   
   const [open, setOpen] = React.useState(false)
   const anchorRef = React.createRef()
@@ -223,7 +235,7 @@ export const UserAvatar = () => {
                 {state.context.userInfo.user.Name}
               </ActionList.Item>
                             
-              { checkMenuPermission('userProfile', state.context.userInfo.user.permissions) &&
+              { checkMenuPermission('userProfile', userInfo) &&
                 <ActionList.Item className={style.userProfileMenuItem}>My profile</ActionList.Item>
               }    
                 

@@ -235,7 +235,7 @@ async function doGetUser(context, event) {
 
       setLocalStorage('site', localStorageSite)
     }
-
+    console.log('a cb ', getUserResult)
     return {
       userInfo: getUserResult,
       signInType,

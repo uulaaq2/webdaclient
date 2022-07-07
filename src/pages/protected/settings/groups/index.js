@@ -5,7 +5,6 @@ import config from 'config'
 import { Box, ButtonGroup, Button, PageLayout, Heading, Breadcrumbs } from '@primer/react'
 import GroupList from './GroupList'
 import NewGroup from './NewGroup'
-import { checkMenuPermission } from 'functions/user/checkPermission'
 import useAppnavigate from 'hooks/useAppnavigate'
 
 import { GlobalStateContext } from 'state/globalState'
